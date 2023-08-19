@@ -78,12 +78,19 @@ class MainController extends Controller
 
         unset($this->words[$wordId]);
         $newDataArray = $this->getRandomWord($this->words);
+        $returnHTML = view('components.answer')
+            ->with(
+                [
+                    "oldWord" => $oldWord[0],
+                    "answerRight" => (mb_strtolower(trim($answer)) === mb_strtolower(trim($oldWord[1])))? "green": "red"
+                ]
+            )
+            ->render();
         return response()->json(
             [
                 "newWord" => $newDataArray["word"],
                 "word_id" => $newDataArray["word_id"],
-                "oldWord" => $oldWord[0],
-                "answerRight" => (mb_strtolower(trim($answer)) === mb_strtolower(trim($oldWord[1])))?? false,
+                "html" => $returnHTML
             ]
         );
     }
